@@ -1,9 +1,16 @@
 "use client";
 
 import { faker } from "@faker-js/faker";
+import { Tooltip } from "@radix-ui/react-tooltip";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+
+import {
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Import Swiper styles
 import "swiper/css";
@@ -59,56 +66,76 @@ export default function PolicySwiper(res?: any) {
       loop={true}
     >
       {datas?.map((item: any, index: any) => {
-        const colors = [
-          "bg-[#5088B0]",
-          "bg-[#3B749B]",
-          "bg-[#245476]",
-          "bg-[#2B4354]",
-        ];
-
         const targetColor = activeIndex === index ? "bg-white" : "bg-white";
 
         return (
           <SwiperSlide key={index}>
-            <div className="relative z-[100] flex w-full justify-center pb-[43px]">
+            <div className="relative flex w-full justify-center px-10 pb-[43px]">
               <div
-                className={`h-[446px] w-[280px] cursor-pointer rounded-[32px] ${targetColor} px-4 pb-[42px] pt-[12px] shadow-[0_16px_32px_rgba(0,0,0,0.2)] duration-700`}
-                onClick={() => router.push(`policy/details/${item.id}`)}
+                className={`min-h-[446px] w-full rounded-3xl ${targetColor} px-8 pb-[42px] pt-[24px] shadow-[0_16px_32px_rgba(0,0,0,0.2)] duration-700`}
               >
                 <div className="flex flex-col justify-center">
-                  <div className="mb-[22px] flex justify-end">
-                    <Image
-                      src="icon/arrow.svg"
-                      alt="arrowIcon"
-                      width={40}
-                      height={40}
-                    />
+                  <div className="text-number-3 mb-[22px] mt-[10px] flex h-[18px] justify-center">
+                    {item.index}
                   </div>
-                  <h5 className="mb-4 text-center text-[12px] font-medium">
+                  <h5 className="mb-[4px] text-center text-text-4">
                     {item.target}
                   </h5>
-                  <h3 className="mx-5 mb-3 text-center text-[20px] font-bold leading-[140%]">
+                  <h3 className="mb-[18px] line-clamp-2 text-center text-title-2">
                     {item.title}
                   </h3>
                 </div>
-                <div className="relative bg-[url('/images/card.png')] bg-contain bg-no-repeat p-8 pb-14">
-                  <Image
-                    src="icon/comma.svg"
-                    alt="dotIcon"
-                    width={22}
-                    height={16}
-                    className="mb-[6px]"
-                  />
-                  <p className="mb-3 text-[12px] font-medium leading-[160%] tracking-tighter text-[#0090A5]">
+                <div className="relative min-h-[186px] rounded-[16px] bg-po-cyan-1 p-[20px]">
+                  <p className="mb-[18px] line-clamp-5 flex text-text-3 text-po-cyan-2">
                     청년들의 다양한 요구와 필요에 부응하기 위해 설계되었습니다.
                     이를 활용하여 제주의 청년들에게 경제적 지원과 기술을 습득할
                     수 있기를 기대중입니다.
                   </p>
-                  <div className="flex items-center pb-4">
-                    <p className="text-[12px] font-medium text-[#3FB9CB]">
-                      43개의 리뷰가 있어요!
-                    </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-[3px]">
+                      <Image
+                        src="/icon/aiIcon.svg"
+                        alt="AI 아이콘"
+                        width={12}
+                        height={12}
+                      />
+                      <p className="mt-[2px] text-caption text-po-cyan-2">
+                        AI의 정책 내용 요약
+                      </p>
+                    </div>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Image
+                            className="cursor-help"
+                            src="/icon/helpIcon.svg"
+                            alt="도움말 아이콘"
+                            width={18}
+                            height={18}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                          <Image
+                            className="animate-fadeIns absolute right-0 top-0 z-50"
+                            src="/images/tooltip-triangle.svg"
+                            alt="툴팁"
+                            width={80}
+                            height={6}
+                          />
+                          <p className="text-center text-[12px] font-extralight leading-[18px] tracking-[-0.1px] text-[#F0F0F5]">
+                            현재 ChatGPT가 처리할 수 있는 범위 내에서 정책의
+                            주요 내용을 요약했습니다.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
+                </div>
+                <div
+                  className="mt-[10px] flex h-[48px] cursor-pointer items-center justify-center rounded-[16px] border-[1px] border-po-gray-300 bg-[#CDCED614] text-text-4 text-po-gray-600 duration-500 hover:bg-po-cyan-1 hover:text-po-cyan-2"
+                  onClick={() => router.push(`policy/details/${item.id}`)}
+                >
+                  상세 보기
                 </div>
               </div>
             </div>

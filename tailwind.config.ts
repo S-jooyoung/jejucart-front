@@ -18,6 +18,88 @@ const config = {
       },
     },
     extend: {
+      fontSize: {
+        "title-1": [
+          "30px",
+          {
+            lineHeight: "38px",
+            letterSpacing: "-0.5",
+            fontWeight: "800",
+          },
+        ],
+        "title-2": [
+          "20px",
+          {
+            lineHeight: "30px",
+            letterSpacing: "-1",
+            fontWeight: "800",
+          },
+        ],
+        "title-3": [
+          "20px",
+          {
+            lineHeight: "30px",
+            letterSpacing: "-0.5",
+            fontWeight: "700",
+          },
+        ],
+        "title-4": [
+          "20px",
+          {
+            lineHeight: "30px",
+            letterSpacing: "-0.5",
+            fontWeight: "500",
+          },
+        ],
+        "subtitle-1": [
+          "16px",
+          {
+            lineHeight: "20px",
+            letterSpacing: "-0.5",
+            fontWeight: "700",
+          },
+        ],
+        "text-1": [
+          "16px",
+          {
+            lineHeight: "20px",
+            letterSpacing: "-0.5",
+            fontWeight: "500",
+          },
+        ],
+        "text-2": [
+          "16px",
+          {
+            lineHeight: "24px",
+            letterSpacing: "-0.5",
+            fontWeight: "400",
+          },
+        ],
+        "text-3": [
+          "14px",
+          {
+            lineHeight: "22px",
+            letterSpacing: "-0.5",
+            fontWeight: "600",
+          },
+        ],
+        "text-4": [
+          "14px",
+          {
+            lineHeight: "22px",
+            letterSpacing: "-0.5",
+            fontWeight: "500",
+          },
+        ],
+        caption: [
+          "12px",
+          {
+            lineHeight: "18px",
+            letterSpacing: "-0.5",
+            fontWeight: "500",
+          },
+        ],
+      },
       fontFamily: {
         pretendard: ["var(--font-pretendard)"],
         allroundgothic: ["var(--font-allroundgothic)"],
@@ -56,6 +138,43 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "po-gray": {
+          "000": "hsl(var(--po-gray-000))",
+          "050": "hsl(var(--po-gray-050))",
+          "200": "hsl(var(--po-gray-200))",
+          "300": "hsl(var(--po-gray-300))",
+          "400": "hsl(var(--po-gray-400))",
+          "500": "hsl(var(--po-gray-500))",
+          "600": "hsl(var(--po-gray-600))",
+          "700": "hsl(var(--po-gray-700))",
+          "800": "hsl(var(--po-gray-800))",
+        },
+        "po-darkcyan": {
+          "1": "hsl(var(--po-darkcyan-1))",
+          "2": "hsl(var(--po-darkcyan-2))",
+          "3": "hsl(var(--po-darkcyan-3))",
+          "4": "hsl(var(--po-darkcyan-4))",
+        },
+        "po-cyan": {
+          "1": "hsl(var(--po-cyan-1))",
+          "2": "hsl(var(--po-cyan-2))",
+        },
+        "po-red": {
+          "1": "hsl(var(--po-red-1))",
+          "2": "hsl(var(--po-red-2))",
+        },
+        "po-green": {
+          "1": "hsl(var(--po-green-1))",
+          "2": "hsl(var(--po-green-2))",
+        },
+        "po-blue": {
+          "1": "hsl(var(--po-blue-1))",
+          "2": "hsl(var(--po-blue-2))",
+        },
+        "po-pink": {
+          "1": "hsl(var(--po-pink-1))",
+          "2": "hsl(var(--po-pink-2))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -63,6 +182,10 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0", transform: "scale(0.9) translateY(8px)" },
+          "100%": { opacity: "1", transform: "scale(1) translateY(0)" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -73,6 +196,7 @@ const config = {
         },
       },
       animation: {
+        fadeIn: "fadeIn 0.25s ease-out forwards",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },

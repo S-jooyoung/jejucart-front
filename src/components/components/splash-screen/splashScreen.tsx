@@ -13,7 +13,7 @@ export function SplashScreen() {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.5,
+        delay: 0,
         delayChildren: 0.2,
         staggerChildren: 0.4,
       },
@@ -22,23 +22,23 @@ export function SplashScreen() {
 
   const item = {
     initial: {
-      y: 20,
+      y: 10,
       opacity: 0,
     },
     animate: {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.5,
-        ease: "easeOut",
+        ease: "easeInOut",
+        duration: 0.75,
       },
     },
   };
 
   return (
-    <div className="relative h-screen w-full bg-[#252730]">
+    <div className="relative flex h-[100vh] w-full items-center bg-[#252730]">
       <motion.div
-        className="relative top-[15%] m-auto flex h-[500px] w-[326px] justify-center"
+        className="relative m-auto flex h-[500px] w-[326px] justify-center"
         variants={container}
         initial="initial"
         animate="animate"
@@ -93,7 +93,7 @@ export function SplashScreen() {
           />
         </motion.div>
         <motion.div
-          className="absolute top-[-9px] w-full text-center font-pretendard text-[22px] text-[#B4E0FF]/80"
+          className="absolute top-[-9px] w-full text-center font-pretendard text-[22px] text-gray-50"
           variants={item}
         >
           제주시 청년 정책 통합 플랫폼

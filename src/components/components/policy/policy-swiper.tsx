@@ -1,16 +1,12 @@
 "use client";
 
-import { faker } from "@faker-js/faker";
-import { Tooltip } from "@radix-ui/react-tooltip";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-import {
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import TooltipModal from "./policy-tooltip-modal";
+
+import { PolicyRecommend } from "@/types/policy";
 
 // Import Swiper styles
 import "swiper/css";
@@ -19,116 +15,72 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { EffectCards } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-export default function PolicySwiper(res?: any) {
+import { Swiper as SwiperCore } from "swiper/types";
+
+export default function PolicySwiper({
+  policyCards,
+}: {
+  policyCards: PolicyRecommend[];
+}) {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(1);
 
-  const handleSlideChange = (swiper: any) => {
+  const handleSlideChange = (swiper: SwiperCore) => {
     setActiveIndex(swiper.activeIndex);
   };
 
-  const datas: any[] = res.policyCards;
-
-  const Temp = [
-    {
-      image: faker.image.urlLoremFlickr(),
-    },
-    {
-      image: faker.image.urlLoremFlickr(),
-    },
-    {
-      image: faker.image.urlLoremFlickr(),
-    },
-    {
-      image: faker.image.urlLoremFlickr(),
-    },
-    {
-      image: faker.image.urlLoremFlickr(),
-    },
-    {
-      image: faker.image.urlLoremFlickr(),
-    },
-    {
-      image: faker.image.urlLoremFlickr(),
-    },
-    {
-      image: faker.image.urlLoremFlickr(),
-    },
-  ];
   return (
     <Swiper
+      className="max-w-[460px]"
       effect="cards"
       onSlideChange={handleSlideChange}
       grabCursor={true}
-      initialSlide={1}
+      initialSlide={0}
       modules={[EffectCards]}
       centeredSlides={false}
       loop={true}
     >
-      {datas?.map((item: any, index: any) => {
+      {policyCards?.map((item: PolicyRecommend, index: number) => {
         const targetColor = activeIndex === index ? "bg-white" : "bg-white";
 
         return (
-          <SwiperSlide key={index}>
-            <div className="relative flex w-full justify-center px-10 pb-[43px]">
+          <SwiperSlide key={index} className="pt-[50px]">
+            <div className="relative m-auto max-w-[390px] px-10 pb-[43px]">
               <div
                 className={`min-h-[446px] w-full rounded-3xl ${targetColor} px-8 pb-[42px] pt-[24px] shadow-[0_16px_32px_rgba(0,0,0,0.2)] duration-700`}
               >
                 <div className="flex flex-col justify-center">
-                  <div className="text-number-3 mb-[22px] mt-[10px] flex h-[18px] justify-center">
-                    {item.index}
+                  <div className="font-lato mb-[22px] mt-[10px] flex h-[18px] justify-center gap-[1px] text-[13px] font-black text-po-gray-500">
+                    <p>{item.curr_idx}</p>
+                    <p>/</p>
+                    <p>{item.total_idx}</p>
                   </div>
-                  <h5 className="mb-[4px] text-center text-text-4">
-                    {item.target}
+                  <h5 className="mb-[4px] line-clamp-1 text-center text-text-4">
+                    {item.name}
                   </h5>
                   <h3 className="mb-[18px] line-clamp-2 text-center text-title-2">
                     {item.title}
                   </h3>
                 </div>
-                <div className="relative min-h-[186px] rounded-[16px] bg-po-cyan-1 p-[20px]">
-                  <p className="mb-[18px] line-clamp-5 flex text-text-3 text-po-cyan-2">
-                    청년들의 다양한 요구와 필요에 부응하기 위해 설계되었습니다.
-                    이를 활용하여 제주의 청년들에게 경제적 지원과 기술을 습득할
-                    수 있기를 기대중입니다.
+                <div className="relative min-h-[186px] rounded-[16px] bg-po-cyan-1">
+                  <p className="mb-[18px] line-clamp-5 flex max-h-[130px] px-[20px] pt-[20px] text-text-3 text-po-cyan-2">
+                    {item.summary}
                   </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-[3px]">
-                      <Image
-                        src="/icon/aiIcon.svg"
-                        alt="AI 아이콘"
-                        width={12}
-                        height={12}
-                      />
-                      <p className="mt-[2px] text-caption text-po-cyan-2">
-                        AI의 정책 내용 요약
-                      </p>
+                  <div className="absolute bottom-[20px] w-full px-[20px]">
+                    <div className="flex w-full items-center justify-between">
+                      <div className="flex items-center gap-[3px]">
+                        <Image
+                          src="/icon/aiIcon.svg"
+                          alt="AI 아이콘"
+                          width={12}
+                          height={12}
+                        />
+                        <p className="mt-[2px] text-caption text-po-cyan-2">
+                          AI의 정책 내용 요약
+                        </p>
+                      </div>
+                      <TooltipModal />
                     </div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Image
-                            className="cursor-help"
-                            src="/icon/helpIcon.svg"
-                            alt="도움말 아이콘"
-                            width={18}
-                            height={18}
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom">
-                          <Image
-                            className="animate-fadeIns absolute right-0 top-0 z-50"
-                            src="/images/tooltip-triangle.svg"
-                            alt="툴팁"
-                            width={80}
-                            height={6}
-                          />
-                          <p className="text-center text-[12px] font-extralight leading-[18px] tracking-[-0.1px] text-[#F0F0F5]">
-                            현재 ChatGPT가 처리할 수 있는 범위 내에서 정책의
-                            주요 내용을 요약했습니다.
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
                   </div>
                 </div>
                 <div

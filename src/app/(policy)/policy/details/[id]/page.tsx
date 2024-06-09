@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
+import LoadingSpinner from "@/components/components/loading/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -20,13 +21,23 @@ interface PolicyCommentType {
   content: string;
 }
 
-const TargetData: Record<string, string> = {
-  U: "대학생",
-  R: "취준생",
-  W: "재직자",
-  M: "신혼부부",
-  F: "농어입인",
-  A: "예술가",
+const Tags: Record<string, Record<string, string>> = {
+  "역량 개발": {
+    title: "역량 개발",
+    color: "text-po-green-2 bg-po-green-1",
+  },
+  "생활 지원": {
+    title: "생활 지원",
+    color: "text-po-blue-2 bg-po-blue-1",
+  },
+  "활동 지원": {
+    title: "활동 지원",
+    color: "text-po-red-2 bg-po-red-1",
+  },
+  "진로 지원": {
+    title: "진로 지원",
+    color: "text-po-pink-2 bg-po-pink-1",
+  },
 };
 
 export default function PolicyDetails({ params }: { params: { id: string } }) {
@@ -35,9 +46,11 @@ export default function PolicyDetails({ params }: { params: { id: string } }) {
   const [hated, setHated] = useState(false);
   const [comment, setComment] = useState("");
 
-  const { data: policyDetails, refetch: detailsRefetch } = usePolicyDetail(
-    params.id
-  );
+  const {
+    data: policyDetails,
+    refetch: detailsRefetch,
+    isLoading: policyDetailsLoading,
+  } = usePolicyDetail(params.id);
   const { mutate: policyComment } = usePolicyComment({
     onSuccess: () => {
       detailsRefetch();
@@ -61,16 +74,24 @@ export default function PolicyDetails({ params }: { params: { id: string } }) {
   };
 
   const handleHate = () => {
-    const newHatedStatus = !hated;
     policyHate(params.id);
-    setHated(newHatedStatus);
+    setHated(true);
+
+    setTimeout(() => {
+      setHated(false);
+    }, 500);
   };
 
   const handleLike = () => {
-    const newLikedStatus = !liked;
+    setLiked(true);
     policyLike(params.id);
-    setLiked(newLikedStatus);
+
+    setTimeout(() => {
+      setLiked(false);
+    }, 500);
   };
+
+  if (policyDetailsLoading) return <LoadingSpinner />;
 
   return (
     <>
@@ -85,16 +106,13 @@ export default function PolicyDetails({ params }: { params: { id: string } }) {
       <div className="mb-5 font-pretendard font-semibold">
         <div className="flex items-center justify-center">
           <div className="w-full">
-            <div className="flex gap-2">
-              {policyDetails?.subject.split("").map((subject: string) => (
-                <div
-                  className="mb-[27px] grid w-fit rounded-[6px] bg-po-red-1 px-[8px] py-[3px] text-sm text-po-red-2"
-                  key={subject}
-                >
-                  {TargetData[subject]}
-                </div>
-              ))}
-            </div>
+            {policyDetails?.category && Tags[policyDetails.category] && (
+              <div
+                className={`mb-3 flex h-[20px] w-[57px] items-center rounded-[6px] px-[6px] text-caption ${Tags[policyDetails.category].color}`}
+              >
+                {Tags[policyDetails.category].title}
+              </div>
+            )}
             <div className="mb-2">
               <h2 className="p-0 text-title-1 text-po-gray-800">
                 {policyDetails?.name}
@@ -106,14 +124,13 @@ export default function PolicyDetails({ params }: { params: { id: string } }) {
               </h5>
             </div>
             <div className="mb-12 mt-4 border-[1px] border-b-0 border-po-gray-300" />
-
             <div className="mr-12">
               <div className="mb-8">
                 <div className="mb-[10px] text-title-3 text-po-gray-800">
                   지원대상
                 </div>
                 <div className="text-text-2 text-po-gray-700">
-                  {policyDetails?.name}
+                  {policyDetails?.subject}
                 </div>
               </div>
               <div className="mb-8">
@@ -156,24 +173,28 @@ export default function PolicyDetails({ params }: { params: { id: string } }) {
 
             <div className="mb-5 flex justify-center gap-[10px]">
               <div
-                className="group flex w-full cursor-pointer flex-col items-center justify-center rounded-[16px] border-[1px] border-solid border-gray-300 bg-[#CDCED614] px-[23px] py-[15px] text-po-gray-600 duration-500 hover:border-po-gray-300 hover:bg-[#CDCED633] active:border-po-cyan-2 active:bg-po-cyan-1"
+                className={`group flex w-full cursor-pointer flex-col items-center justify-center rounded-[16px] border-[1px] border-solid px-[23px] py-[15px] text-po-gray-600 duration-500  ${liked ? "border-po-cyan-2 bg-po-cyan-1" : "border-gray-300 bg-[#CDCED614] hover:border-po-gray-300 hover:bg-[#CDCED633]"}`}
                 onClick={() => handleLike()}
               >
                 <h5 className="text-2xl font-black text-po-gray-700">
-                  {policyDetails?.likeRate}
+                  {policyDetails?.like_count}
                 </h5>
-                <div className="text-text-4 font-medium text-po-gray-600 group-active:text-po-cyan-2">
+                <div
+                  className={`text-text-4 font-medium duration-500 group-active:text-po-cyan-2 ${liked ? "text-po-cyan-2" : "text-po-gray-600"}`}
+                >
                   좋아요
                 </div>
               </div>
               <div
-                className="group flex w-full cursor-pointer flex-col items-center justify-center rounded-[16px] border-[1px] border-solid border-gray-300 bg-[#CDCED614] px-[23px] py-[15px] text-po-gray-600 duration-500 hover:border-po-gray-300 hover:bg-[#CDCED633] active:border-po-cyan-2 active:bg-po-cyan-1"
+                className={`group flex w-full cursor-pointer flex-col items-center justify-center rounded-[16px] border-[1px] border-solid px-[23px] py-[15px] text-po-gray-600 duration-500  ${hated ? "border-po-cyan-2 bg-po-cyan-1" : "border-gray-300 bg-[#CDCED614] hover:border-po-gray-300 hover:bg-[#CDCED633]"}`}
                 onClick={() => handleHate()}
               >
                 <h5 className="text-2xl font-black text-po-gray-700">
-                  {policyDetails?.hateRate}
+                  {policyDetails?.hate_count}
                 </h5>
-                <div className="text-text-4 font-medium text-po-gray-600 group-active:text-po-cyan-2">
+                <div
+                  className={`text-text-4 font-medium duration-500 group-active:text-po-cyan-2 ${hated ? "text-po-cyan-2" : "text-po-gray-600"}`}
+                >
                   별로예요
                 </div>
               </div>
